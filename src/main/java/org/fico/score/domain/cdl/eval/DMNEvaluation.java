@@ -1,29 +1,31 @@
 package org.fico.score.domain.cdl.eval;
 
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.validation.Valid;
 
-import org.fico.score.domain.cdl.context.CDLContext;
+import org.fico.score.domain.cdl.context.DMNMeta;
 import org.kie.kogito.incubation.application.AppRoot;
-import org.kie.kogito.incubation.common.MapDataContext;
+import org.kie.kogito.incubation.common.DataContext;
+import org.kie.kogito.incubation.common.ExtendedDataContext;
 import org.kie.kogito.incubation.decisions.DecisionIds;
 import org.kie.kogito.incubation.decisions.services.DecisionService;
 
-
 @ApplicationScoped
-public class CDLEvaluation {
+public class DMNEvaluation implements IEvaluation {
 
-    @Inject AppRoot root;
     @Inject DecisionService svc;
-    
-    public String eval(@Valid CDLContext context) {
+    @Inject AppRoot root;
+
+
+    public ExtendedDataContext eval(DMNMeta meta, DataContext context) {
         var id = root
             .get(DecisionIds.class)
-            .get("fico.ascore.cdl", "CDL");
-        return svc
+            .get(meta.getNamespace(), meta.getFilename())
+        ;
+
+        return this.svc
             .evaluate(id, context)
-            .as(MapDataContext.class)
-            .get("ScoreDecision", String.class);
+        ;
     }
 }

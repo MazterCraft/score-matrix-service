@@ -11,12 +11,11 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import io.smallrye.mutiny.Uni;
 
-@Path("/decision")
+@Path("/greeting")
 @Tag(name = "Decision Service", description = "Decision Service API")
 public class Greeting {
 
     @POST
-    @Path("/cdl")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
     @Operation(operationId = "cdlDecision", description = "CDL Decision Matrix")
