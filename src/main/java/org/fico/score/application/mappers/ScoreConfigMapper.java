@@ -9,6 +9,8 @@ import org.fico.score.framework.adapters.persistence.repo.entity.MatrixConfig;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import javax.enterprise.context.ApplicationScoped;
+
 @Mapper(componentModel = "cdi")
 public abstract class ScoreConfigMapper {
 
@@ -26,10 +28,6 @@ public abstract class ScoreConfigMapper {
     public ModelConfig from(List<MatrixConfig> source) throws Exception {
         if (source.size() == 0) {
             throw new Exception("matrix config not defined");
-        }
-
-        for (int i = 0; i < source.size(); i++) {
-            System.out.println("fieldName: " + source.get(i).getFieldName());
         }
 
         var meta = meta(source.get(0));

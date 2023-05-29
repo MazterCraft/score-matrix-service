@@ -8,6 +8,12 @@ import org.fico.score.application.usecases.command.FieldType;
 import org.kie.kogito.incubation.common.DataContext;
 import org.kie.kogito.incubation.common.MapDataContext;
 
+import io.smallrye.mutiny.Multi;
+import io.smallrye.mutiny.Uni;
+import lombok.extern.slf4j.Slf4j;
+
+
+@Slf4j
 public class ContextHandler {
     private List<ContextField> fields;
 
@@ -18,7 +24,8 @@ public class ContextHandler {
         }
     }
 
-    public DataContext validate(Map<String, Object> kv) throws Exception {
+    public Multi<String> /* DataContext */ validate(Map<String, Object> kv) throws Exception {
+        log.info("--- validate context");
         Map<String, Object> newCtx = new HashMap<>();
         for (int i = 0; i < this.fields.size(); i++) {
             var field = this.fields.get(i);
@@ -34,7 +41,6 @@ public class ContextHandler {
             }
 
             if (field.type == FieldType.DECIMAL) {
-                System.out.println("----------------- iv: " + iv);
                 if (iv instanceof Double) {
                     value = Double.valueOf(String.format("%.3f", iv));
                 }
@@ -55,6 +61,19 @@ public class ContextHandler {
             // TODO: validate incoming value under regex validation
         }
 
-        return MapDataContext.of(kv);
+        // return MapDataContext.of(kv);
+        return Multi.createFrom().item("Ok!");
+    }
+
+    public Uni<String> validate2(int x) {
+        log.info("--- something I don't really understand when using reactive smallrye");
+        if (x > 1) {
+            var error  = new Exception("x must greater than one");
+            return Uni.createFrom().failure(error);
+        }
+        return Uni
+            .createFrom()
+            .item("OK!")
+        ;
     }
 }

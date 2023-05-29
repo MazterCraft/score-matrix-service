@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
+import io.smallrye.mutiny.Multi;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.fico.score.application.ports.in.DMNInputPort;
 import org.fico.score.framework.adapters.persistence.repo.entity.MatrixConfig;
@@ -74,10 +75,11 @@ public class CDLRestApdapter {
         var decision = dmn.eval(modelName, context);
         log.info("--- decision " + decision);
         log.info("--- dmn Evaluation end");
-        return Uni
-            .createFrom()
-            .item("Ok!")
-        ;
+        return decision;
+//        return Uni
+//                .createFrom()
+//                .item("Ok!")
+//                ;
     }
 
     @POST
