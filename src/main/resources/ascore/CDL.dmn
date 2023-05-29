@@ -856,6 +856,13 @@
     <dmn:extensionElements/>
     <dmn:variable id="_9D1346A9-5E6C-44B0-BAED-80F7EBC00373" name="down_payment" typeRef="number"/>
   </dmn:inputData>
+  <dmn:decision id="_450C2C32-1C0C-4AB6-B17D-61DF510C4683" name="ScoreDecision">
+    <dmn:extensionElements/>
+    <dmn:variable id="_A0503888-9A4E-4217-BF6C-9D342F829087" name="ScoreDecision" typeRef="string"/>
+    <dmn:literalExpression id="_E62FBA02-C023-4F7A-8ECA-8C872CD50820">
+      <dmn:text>"First Step To Havean"</dmn:text>
+    </dmn:literalExpression>
+  </dmn:decision>
   <dmndi:DMNDI>
     <dmndi:DMNDiagram id="_CBBDBC7F-9AEA-434D-98EC-7563AEF31C4A" name="DRG">
       <di:extension>
@@ -927,6 +934,7 @@
             <kie:width>100</kie:width>
             <kie:width>100</kie:width>
           </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_E62FBA02-C023-4F7A-8ECA-8C872CD50820"/>
         </kie:ComponentsWidthsExtension>
       </di:extension>
       <dmndi:DMNShape id="dmnshape-drg-_88456687-00C5-41E1-9F17-A8F6FC6558F7" dmnElementRef="_88456687-00C5-41E1-9F17-A8F6FC6558F7" isCollapsed="false">
@@ -1035,6 +1043,15 @@
           <dmndi:FontColor red="0" green="0" blue="0"/>
         </dmndi:DMNStyle>
         <dc:Bounds x="1075.2990654205607" y="622" width="100" height="50"/>
+        <dmndi:DMNLabel/>
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="dmnshape-drg-_450C2C32-1C0C-4AB6-B17D-61DF510C4683" dmnElementRef="_450C2C32-1C0C-4AB6-B17D-61DF510C4683" isCollapsed="false">
+        <dmndi:DMNStyle>
+          <dmndi:FillColor red="255" green="255" blue="255"/>
+          <dmndi:StrokeColor red="0" green="0" blue="0"/>
+          <dmndi:FontColor red="0" green="0" blue="0"/>
+        </dmndi:DMNStyle>
+        <dc:Bounds x="316" y="153" width="100" height="50"/>
         <dmndi:DMNLabel/>
       </dmndi:DMNShape>
       <dmndi:DMNEdge id="dmnedge-drg-_08745658-4E1A-4941-8626-8F0E9DB3805B" dmnElementRef="_08745658-4E1A-4941-8626-8F0E9DB3805B">

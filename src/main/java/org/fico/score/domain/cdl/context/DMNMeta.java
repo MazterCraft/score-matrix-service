@@ -8,12 +8,12 @@ public class DMNMeta {
     String filename;
     String location;
 
-    public DMNMeta(String namespace, String filename, String location) throws Exception {
+    public DMNMeta(String namespace, String filename, String location) {
         if (!filename.trim().endsWith(".dmn")) {
-            throw new Exception("file type is invalid. Eg: Rule.dmn");
+            throw new RuntimeException("file type is invalid. Eg: Rule.dmn");
         }
         if (location.trim().endsWith("/")) {
-            throw new Exception("location must have no slash at the end");
+            throw new RuntimeException("location must have no slash at the end");
         }
         var path = location + "/"  + filename;
         var dmnResource = getClass().getClassLoader().getResource(path);

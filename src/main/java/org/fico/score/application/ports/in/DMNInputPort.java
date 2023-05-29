@@ -2,45 +2,44 @@ package org.fico.score.application.ports.in;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import io.smallrye.mutiny.groups.UniJoin;
-import org.fico.score.application.ports.out.DMNOutputPort;
-import org.fico.score.application.usecases.DMNUsecase;
-import org.fico.score.domain.cdl.context.ContextField;
-import org.fico.score.domain.cdl.context.ContextHandler;
+import org.fico.score.application.ports.out.InternalScoreOutputPort;
+import org.fico.score.application.usecases.InternalScoreUsecases;
 import org.fico.score.domain.cdl.eval.IEvaluation;
 
-import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
-import io.smallrye.mutiny.unchecked.Unchecked;
 import lombok.extern.slf4j.Slf4j;
-import org.kie.dmn.api.core.DMNContext;
+import org.kie.kogito.incubation.common.DataContext;
+import org.kie.kogito.incubation.common.MapDataContext;
 
 @ApplicationScoped
 @Slf4j
-public class DMNInputPort implements DMNUsecase {
+public class DMNInputPort implements InternalScoreUsecases {
 
-    @Inject DMNOutputPort repo;
+    @Inject
+    InternalScoreOutputPort repo;
     @Inject IEvaluation evaluation;
 
     @Override
-    public Uni<String> eval(String modelname, Map<String, Object> context) throws Exception {
-        log.info("--- usecase DMNEvaludation start 3");
-        Uni<String> original = Uni.createFrom().item("OK!");
+    public Uni<String> eval(String modelname, Map<String, Object> context) {
+        log.info("--- begin: use-case InternalScore Evaluation");
 
-        List<Uni<String>> errors = repo
-                .ctxFields(modelname)
-                .getFields()
-                .stream().map(i -> i.in(context).onItem().transform(f -> "x"))
-                .toList();
-        Uni<String> failure = Uni.join().all(errors).andFailFast().onItem().transform(f -> f.get(0));
+        var modelConfig = repo.loadConfig(modelname);
+        modelConfig.validate(context);
 
-        log.info("--- usecase DMNEvaludation end");
-        return Uni.join().all(original, failure).andFailFast().onItem().transform(f -> f.get(0));
+        String decision = evaluation
+                .eval(modelConfig.getModelmeta(), MapDataContext.of(context))
+                .as(MapDataContext.class)
+                .get("ScoreDecision", String.class)
+                ;
+
+        log.info("--- end: use-case InternalScore Evaluation");
+        return Uni
+                .createFrom()
+                .item(decision);
     }
-    
 }
